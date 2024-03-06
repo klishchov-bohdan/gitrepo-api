@@ -11,14 +11,14 @@ class TestRepository:
     async def test_get_all_repositories(self, ac: AsyncClient, api: FastAPI, uow: UnitOfWork):
         async with uow:
             await uow.repository_repo.add_one({
-                    'repo': 'repo_name',
-                    'owner': 'owner_name',
-                    'stars': 28723,
-                    'watchers': 7283,
-                    'forks': 724,
-                    'open_issues': 437,
-                    'language': 'Python',
-                })
+                'repo': 'repo_name',
+                'owner': 'owner_name',
+                'stars': 28723,
+                'watchers': 7283,
+                'forks': 724,
+                'open_issues': 437,
+                'language': 'Python',
+            })
             await uow.commit()
         req_url = api.url_path_for('get_repositories')
         response = await ac.get(req_url, follow_redirects=True)
@@ -35,17 +35,17 @@ class TestRepository:
     async def test_get_top100_repositories(self, ac: AsyncClient, api: FastAPI, uow: UnitOfWork):
         async with uow:
             await uow.repository_repo.add_one({
-                    'repo': 'repo_name10',
-                    'owner': 'owner_name10',
-                    'stars': 287,
-                    'watchers': 7283,
-                    'forks': 724,
-                    'open_issues': 437,
-                    'language': 'Python',
-                })
+                'repo': 'repo_name10',
+                'owner': 'owner_name10',
+                'stars': 287,
+                'watchers': 7283,
+                'forks': 724,
+                'open_issues': 437,
+                'language': 'Python',
+            })
             await uow.commit()
         req_url = api.url_path_for('get_top100_repositories')
-        response = await ac.get(req_url+'?sort_by=stars&sort_strategy=DESC', follow_redirects=True)
+        response = await ac.get(req_url + '?sort_by=stars&sort_strategy=DESC', follow_redirects=True)
         assert response.status_code == 200, 'Can`t get top 100 repositories'
         assert response.text[0] == '[' and response.text[-1] == ']', 'Response json is not a list'
         assert response.json()[0]['stars'] > response.json()[-1]['stars'], 'Sorting error'
@@ -115,7 +115,7 @@ class TestRepository:
             })
             await uow.commit()
         req_url = api.url_path_for('get_repository_activity', owner=repo['owner'], repo=repo['repo'])
-        response = await ac.get(req_url+'?since=2020-01-01&until=2024-02-02', follow_redirects=True)
+        response = await ac.get(req_url + '?since=2020-01-01&until=2024-02-02', follow_redirects=True)
         assert response.status_code == 200, 'Can`t get repo activity by id'
         assert response.json()[0]['date'], 'Response date not exists'
 

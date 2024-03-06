@@ -1,10 +1,8 @@
-from typing import List
-
 from fastapi import APIRouter, status
 
 from app.api.deps import UOWDependency
-from app.exceptions import DataNotFound, AuthorNotFoundError, BadRequestError
-from app.schemas.author import SimpleAuthorResp, AuthorResp, AuthorBaseSchema
+from app.exceptions import AuthorNotFoundError, BadRequestError, DataNotFound
+from app.schemas.author import AuthorBaseSchema, AuthorResp, SimpleAuthorResp
 from app.services.author import AuthorService
 
 router = APIRouter()
@@ -26,7 +24,7 @@ async def get_author(author_id: int, uow: UOWDependency):
 
 
 @router.get('/',
-            response_model=List[AuthorResp],
+            response_model=list[AuthorResp],
             status_code=status.HTTP_200_OK,
             description='Get and return all Authors',
             summary='Get Authors')

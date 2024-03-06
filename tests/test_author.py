@@ -1,5 +1,3 @@
-import datetime
-
 from fastapi import FastAPI
 from httpx import AsyncClient
 
@@ -11,8 +9,8 @@ class TestAuthor:
     async def test_get_all_authors(self, ac: AsyncClient, api: FastAPI, uow: UnitOfWork):
         async with uow:
             await uow.author_repo.add_one({
-                    'name': 'author_name',
-                })
+                'name': 'author_name',
+            })
             await uow.commit()
         req_url = api.url_path_for('get_authors')
         response = await ac.get(req_url, follow_redirects=True)

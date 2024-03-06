@@ -1,12 +1,17 @@
 from datetime import datetime
-from typing import List
 
 from fastapi import APIRouter, status
 
 from app.api.deps import UOWDependency
-from app.exceptions import RepositoryNotFoundError, DataNotFound, BadRequestError
-from app.schemas.repository import SimpleRepositoryResp, RepositoryBaseSchema, RepositoryResp, SortBy, SortStrategy, \
-    RepositoryActivity
+from app.exceptions import BadRequestError, DataNotFound, RepositoryNotFoundError
+from app.schemas.repository import (
+    RepositoryActivity,
+    RepositoryBaseSchema,
+    RepositoryResp,
+    SimpleRepositoryResp,
+    SortBy,
+    SortStrategy,
+)
 from app.services.repository import RepositoryService
 
 router = APIRouter()
@@ -28,7 +33,7 @@ async def get_repository(repository_id: int, uow: UOWDependency):
 
 
 @router.get('/',
-            response_model=List[RepositoryResp],
+            response_model=list[RepositoryResp],
             status_code=status.HTTP_200_OK,
             description='Get and return all Repositories',
             summary='Get Repositories')
@@ -41,7 +46,7 @@ async def get_repositories(uow: UOWDependency):
 
 
 @router.get('/top100/',
-            response_model=List[RepositoryResp],
+            response_model=list[RepositoryResp],
             status_code=status.HTTP_200_OK,
             description='Get and return top 100 Repositories by stars',
             summary='Get top 100 Repositories')
@@ -54,7 +59,7 @@ async def get_top100_repositories(sort_by: SortBy, sort_strategy: SortStrategy, 
 
 
 @router.get('/{owner}/{repo}/activity/',
-            response_model=List[RepositoryActivity],
+            response_model=list[RepositoryActivity],
             status_code=status.HTTP_200_OK,
             description='Get and return Repository activity',
             summary='Get Repository activity')

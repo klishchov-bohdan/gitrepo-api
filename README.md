@@ -61,7 +61,7 @@ CREATE OR REPLACE FUNCTION update_rating()
             WHERE main.id = subquery.id;
             RETURN NULL;
         END;
-        
+
 CREATE TRIGGER check_rating
         AFTER UPDATE OR INSERT OR DELETE
         ON repository

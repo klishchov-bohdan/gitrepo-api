@@ -1,4 +1,4 @@
-from app.schemas.author import SimpleAuthorResp, AuthorBaseSchema, AuthorResp
+from app.schemas.author import AuthorBaseSchema, AuthorResp, SimpleAuthorResp
 from app.utils.uow import IUnitOfWork
 
 

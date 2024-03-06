@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from app.repos.repository import RepositoryRepo
 from app.repos.author import AuthorRepo
+from app.repos.repository import RepositoryRepo
 from app.repos.repository_author import RepositoryAuthorRepo
 
 

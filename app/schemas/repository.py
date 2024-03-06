@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
 
 from pydantic import BaseModel, ConfigDict
 
@@ -45,4 +44,4 @@ class RepositoryResp(RepositoryBaseSchema):
 class RepositoryActivity(BaseModel):
     date: datetime
     commits: int
-    authors: List[str]
+    authors: list[str]

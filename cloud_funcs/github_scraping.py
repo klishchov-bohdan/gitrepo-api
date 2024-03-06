@@ -8,8 +8,8 @@ import aiohttp
 import requests
 from bs4 import BeautifulSoup
 from lxml import etree
-from sqlalchemy import text, NullPool
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
+from sqlalchemy import NullPool, text
+from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 
 def parse_links():
@@ -43,26 +43,27 @@ async def parse_repo(url, retry: int):
         repo_owner = dom.xpath('//*[@id="repository-container-header"]/div[1]/div[1]/div/span[1]/a')[-1].text.strip()
         try:
             repo_stars = dom.xpath('//div[@class="mt-2"]/a/strong')[0].text.strip()
-        except Exception as ex:
+        except Exception:
             repo_stars = '0'
         try:
             repo_watching = dom.xpath('//div[@class="mt-2"]/a/strong')[1].text.strip()
-        except Exception as ex:
+        except Exception:
             repo_watching = '0'
         try:
             repo_forks = dom.xpath('//div[@class="mt-2"]/a/strong')[2].text.strip()
-        except Exception as ex:
+        except Exception:
             repo_forks = '0'
         try:
             repo_issues = dom.xpath('//span[@id="issues-repo-tab-count"]')[-1].text.strip()
-        except Exception as ex:
+        except Exception:
             repo_issues = '0'
         try:
-            repo_language = dom.xpath('//ul[@class="list-style-none"]/li/a/span[@class="color-fg-default text-bold mr-1"]')[0].text.strip()
-        except Exception as ex:
-            repo_language = "None"
+            repo_language = dom.xpath(
+                '//ul[@class="list-style-none"]/li/a/span[@class="color-fg-default text-bold mr-1"]')[0].text.strip()
+        except Exception:
+            repo_language = 'None'
         async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.get(str(resp.url)+'/activity?time_period=year') as activity_resp:
+            async with session.get(str(resp.url) + '/activity?time_period=year') as activity_resp:
                 data = await activity_resp.read()
                 resp_json = json.loads(data)
         activity_list = resp_json['payload']['activityList']['items']
@@ -111,14 +112,14 @@ async def save_to_db(repos: list[dict], engine: AsyncEngine):
             }
             if new_commit not in commits:
                 commits.append(new_commit)
-    repo_stmt = text(f'''
-                INSERT INTO repository (repo, owner, stars, watchers, forks, open_issues, language) 
+    repo_stmt = text('''
+                INSERT INTO repository (repo, owner, stars, watchers, forks, open_issues, language)
                 VALUES (:repo, :owner, :stars, :watchers, :forks, :open_issues, :language)
-                ON CONFLICT (repo) DO UPDATE 
+                ON CONFLICT (repo) DO UPDATE
                     SET stars = EXCLUDED.stars, watchers = EXCLUDED.watchers, forks = EXCLUDED.forks, open_issues = EXCLUDED.open_issues, language = EXCLUDED.language;
             ''')
-    authors_stmt = text(f'''
-                INSERT INTO author (name) 
+    authors_stmt = text('''
+                INSERT INTO author (name)
                 VALUES (:name)
                 ON CONFLICT (name) DO NOTHING;
             ''')
@@ -126,8 +127,8 @@ async def save_to_db(repos: list[dict], engine: AsyncEngine):
                 INSERT INTO repository_author (id, repository_id, pushed_at, author_id)
                 VALUES (
                     :id,
-                    (SELECT id FROM repository WHERE :repo_name = repo), 
-                    :pushed_at, 
+                    (SELECT id FROM repository WHERE :repo_name = repo),
+                    :pushed_at,
                     (SELECT id FROM author WHERE :author_name = name))
                 ON CONFLICT (id) DO NOTHING;
     ''')
@@ -159,11 +160,11 @@ def handler(event, context):
         repos = asyncio.run(main())
         asyncio.run(save_to_db(repos, engine))
         return {
-            "statusCode": 200,
-            "body": 'ok',
+            'statusCode': 200,
+            'body': 'ok',
         }
     except Exception as ex:
         return {
-            "statusCode": 500,
-            "body": str(ex),
+            'statusCode': 500,
+            'body': str(ex),
         }

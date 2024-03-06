@@ -4,7 +4,7 @@ from typing import AsyncGenerator, Final
 import pytest
 from fastapi import FastAPI
 from httpx import AsyncClient
-from sqlalchemy import NullPool, insert
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,

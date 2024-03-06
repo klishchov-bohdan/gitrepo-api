@@ -2,8 +2,8 @@ from alembic_utils.pg_function import PGFunction
 from alembic_utils.pg_trigger import PGTrigger
 
 rating_update_func = PGFunction(
-    schema="public",
-    signature="rating_update_func()",
+    schema='public',
+    signature='rating_update_func()',
     definition="""
                 RETURNS TRIGGER
                         LANGUAGE PLPGSQL
@@ -20,9 +20,9 @@ rating_update_func = PGFunction(
             """)
 
 rating_update_trigger = PGTrigger(
-    schema="public",
-    signature="rating_update_trigger",
-    on_entity="public.repository",
+    schema='public',
+    signature='rating_update_trigger',
+    on_entity='public.repository',
     is_constraint=False,
     definition="""
                     AFTER UPDATE OR INSERT OR DELETE

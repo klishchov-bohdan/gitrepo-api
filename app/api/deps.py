@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 
 from app.database import async_session_maker
-from app.utils.uow import UnitOfWork, IUnitOfWork
+from app.utils.uow import IUnitOfWork, UnitOfWork
 
 
 def get_uow() -> UnitOfWork:

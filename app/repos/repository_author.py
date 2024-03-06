@@ -1,4 +1,4 @@
-from app.models import Author, RepositoryAuthor
+from app.models import RepositoryAuthor
 from app.utils.repo import SQLAlchemyRepository
 
 

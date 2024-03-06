@@ -13,7 +13,7 @@ class RepositoryRepo(SQLAlchemyRepository):
         stmt = text(f'''
                     SELECT *
                     FROM {self.model.__tablename__}
-                    ORDER BY {sort_by} {sort_strategy} 
+                    ORDER BY {sort_by} {sort_strategy}
                     LIMIT 100
                 ''')
         result = await self.session.execute(stmt)
@@ -28,7 +28,7 @@ class RepositoryRepo(SQLAlchemyRepository):
             'since': since,
             'until': until
         }
-        stmt = text(f'''
+        stmt = text('''
                     SELECT
                         DATE(ra.pushed_at) AS date,
                         COUNT(*) AS commits,

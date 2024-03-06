@@ -33,4 +33,3 @@ Base = declarative_base(metadata=metadata, cls=AsyncAttrs)
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
-        

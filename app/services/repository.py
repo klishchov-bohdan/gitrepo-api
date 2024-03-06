@@ -1,7 +1,13 @@
 from datetime import datetime
 
-from app.schemas.repository import RepositoryBaseSchema, SimpleRepositoryResp, RepositoryResp, SortStrategy, SortBy, \
-    RepositoryActivity
+from app.schemas.repository import (
+    RepositoryActivity,
+    RepositoryBaseSchema,
+    RepositoryResp,
+    SimpleRepositoryResp,
+    SortBy,
+    SortStrategy,
+)
 from app.utils.uow import IUnitOfWork
 
 

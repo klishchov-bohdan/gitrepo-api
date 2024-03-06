@@ -1,11 +1,10 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
 from app.core.config import settings
-from app.database import get_async_session, async_session_maker
+from app.database import async_session_maker
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -16,17 +15,17 @@ if settings.BACKEND_CORS_ORIGINS:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            str(origin).strip("/") for origin in settings.BACKEND_CORS_ORIGINS
+            str(origin).strip('/') for origin in settings.BACKEND_CORS_ORIGINS
         ],
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_methods=['*'],
+        allow_headers=['*'],
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.on_event("startup")
+@app.on_event('startup')
 async def startup_event():
     get_trigger_stmt = text('''
         SELECT * FROM information_schema.triggers WHERE trigger_name = 'check_rating';

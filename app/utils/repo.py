@@ -44,7 +44,7 @@ class SQLAlchemyRepository(AbstractRepository):
         column_names = ', '.join(data.keys())
         column_values = ', '.join([':' + key for key in data.keys()])
         stmt = text(f'''
-            INSERT INTO {self.model.__tablename__} ({column_names}) 
+            INSERT INTO {self.model.__tablename__} ({column_names})
             VALUES ({column_values})
             RETURNING id;
         ''')
@@ -58,7 +58,7 @@ class SQLAlchemyRepository(AbstractRepository):
     async def find_all(self):
         stmt = text(f'''
                             SELECT *
-                            FROM {self.model.__tablename__} 
+                            FROM {self.model.__tablename__}
                         ''')
         result = await self.session.execute(stmt)
         res_columns = result.keys()
@@ -69,7 +69,7 @@ class SQLAlchemyRepository(AbstractRepository):
         try:
             stmt = text(f'''
                         SELECT *
-                        FROM {self.model.__tablename__} 
+                        FROM {self.model.__tablename__}
                         WHERE id = {id}
                     ''')
             result = await self.session.execute(stmt)
@@ -85,7 +85,7 @@ class SQLAlchemyRepository(AbstractRepository):
         try:
             values_update = ', '.join([f'{key} = :{key}' for key in data.keys()])
             stmt = text(f'''
-                        UPDATE {self.model.__tablename__} 
+                        UPDATE {self.model.__tablename__}
                         SET {values_update}
                         WHERE id = {id}
                         RETURNING id;
@@ -99,7 +99,7 @@ class SQLAlchemyRepository(AbstractRepository):
     async def delete_one(self, id: int):
         try:
             stmt = text(f'''
-                        DELETE FROM {self.model.__tablename__} 
+                        DELETE FROM {self.model.__tablename__}
                         WHERE id = {id}
                         RETURNING id;
                     ''')
