@@ -1,0 +1,4 @@
+key.json
+venv
+.idea
+.pytest_cache
